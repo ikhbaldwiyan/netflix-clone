@@ -14,13 +14,12 @@ function Banner({ netflixOriginals } : Props) {
 
   useEffect(() => {
     setMovie(
-      netflixOriginals[Math.floor(Math.random() * netflixOriginals.length )]
+      netflixOriginals[Math.round(Math.random() * netflixOriginals.length )]
     )
   }, [netflixOriginals])
   
-
   return (
-    <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
+    <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[90vh] lg:justify-end lg:pb-8">
       <div className="absolute -z-10 top-0 left-0 h-[95vh] w-screen">
         <Image 
           src={`${baseUrl}${movie?.backdrop_path || movie?.poster_path}`}
@@ -28,11 +27,11 @@ function Banner({ netflixOriginals } : Props) {
           objectFit="cover"
         />
       </div>
-      <div className="px-4 lg:px-8 space-y-4">
+      <div className="space-y-4">
         <h1 className="text-2xl md:text-4xl lg:text-5xl">
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
-        <p className="max-w-xs text-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-xl">
+        <p className="max-w-xs text-shadow-md text-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-lg">
           {movie?.overview}
         </p>
         <div className="flex space-x-3 py-4">
