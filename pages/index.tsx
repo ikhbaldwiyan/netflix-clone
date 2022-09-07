@@ -1,9 +1,11 @@
+import { useState } from "react"
 import { Movie } from "../types"
 import api from "../utils/api"
 
 import Banner from "../components/Banner"
 import Layout from "../components/Layout"
 import Row from "../components/Row"
+import Modal from "../components/Modal"
 
 interface Props {
   trendingNow: Movie[]
@@ -24,18 +26,32 @@ const Home = ({
   topRated,
   trendingNow
 }: Props) => {
+
+  const [modal, setModal] = useState(false);
+  const [modalMovie, setModalMovie] = useState<Movie | any>();
+
+  const modalProps = {
+    modal,
+    setModal,
+    modalMovie,
+    setModalMovie
+  }
+
   return (
     <Layout title="Home - Netflix Clone">
-      <Banner netflixOriginals={actionMovies} />
+      <Banner netflixOriginals={actionMovies} {...modalProps} />
       <section className="space-y-4 lg:space-y-16">
-        <Row title="Trending Now" movies={trendingNow} />
-        <Row title="Top Rated" movies={topRated} />
-        <Row title="Action Thrillers" movies={actionMovies} />
-        <Row title="Comedies" movies={comedyMovies} />
-        <Row title="Horror" movies={horrorMovies} />
-        <Row title="Romance" movies={romanceMovies} />
-        <Row title="Documentaries" movies={documentaries} />
+        <Row title="Trending Now" movies={trendingNow}  {...modalProps}/>
+        <Row title="Top Rated" movies={topRated} {...modalProps}/>
+        <Row title="Action Thrillers" movies={actionMovies} {...modalProps}/>
+        <Row title="Comedies" movies={comedyMovies} {...modalProps} />
+        <Row title="Horror" movies={horrorMovies}  {...modalProps}/>
+        <Row title="Romance" movies={romanceMovies}  {...modalProps}/>
+        <Row title="Documentaries" movies={documentaries}  {...modalProps}/>
       </section>
+      {modal && (
+        <Modal {...modalProps} />
+      )}
     </Layout>
   )
 }

@@ -21,6 +21,14 @@ export interface Genre {
     vote_average: number
     vote_count: number
   }
+
+  export interface Modal {
+    movie: Movie
+    modal: boolean,
+    setModal: Function,
+    modalMovie: any,
+    setModalMovie: Function,
+  }
   
   export interface Element {
     type:

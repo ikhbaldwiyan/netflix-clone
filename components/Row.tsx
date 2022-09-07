@@ -6,11 +6,22 @@ import Thumbnail from "./Thumbnail"
 interface Props {
   title: string
   movies: Movie[]
+  modal: boolean
+  setModal: Function
+  setModalMovie: Function
+  modalMovie: any
 }
 
-function Row({ title, movies }: Props) {
+function Row({ title, movies, modal, modalMovie, setModal, setModalMovie }: Props) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [isMoved, setIsMoved] = useState(false);
+
+  const modalProps = {
+    modal,
+    modalMovie,
+    setModal,
+    setModalMovie
+  }
 
   const handleClick = (direction: string) => {
     setIsMoved(true);
@@ -38,7 +49,7 @@ function Row({ title, movies }: Props) {
         
         <div ref={rowRef} className="flex scrollbar-hide items-center space-x-0.5 overflow-x-scroll md:space-x-2.5 md:p-2">
           {movies.map((movie) => (
-            <Thumbnail key={movie.id}  movie={movie} />
+            <Thumbnail key={movie.id}  movie={movie} {...modalProps} />
           ))}
         </div>
         

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Movie } from "../../types"
 import api from "../../utils/api"
 
 import Layout from "../../components/Layout"
 import Row from "../../components/Row"
+import Modal from "../../components/Modal"
 
 interface Props {
   original: Movie[],
@@ -13,13 +14,26 @@ interface Props {
 
 function Popular({ original, topRated, horror }: Props) {
 
+  const [modal, setModal] = useState(false);
+  const [modalMovie, setModalMovie] = useState<Movie | any>();
+
+  const modalProps = {
+    modal,
+    setModal,
+    modalMovie,
+    setModalMovie
+  }
+
   return (
     <Layout title="New & Popular">
       <section className="py-24 space-y-10">
-        <Row title="New Original Movies" movies={original} />
-        <Row title="Popular This Weekend" movies={topRated} />
-        <Row title="Popular This Month" movies={horror} />
+        <Row title="New Original Movies" movies={original} {...modalProps}/>
+        <Row title="Popular This Weekend" movies={topRated} {...modalProps}/>
+        <Row title="Popular This Month" movies={horror} {...modalProps}/>
       </section>
+      {modal && (
+        <Modal {...modalProps} />
+      )}
     </Layout>
   )
 }
