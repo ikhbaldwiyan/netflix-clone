@@ -23,6 +23,29 @@ function Header() {
 
   }, []);
 
+  const menu = [
+    {
+      name: "Home",
+      href: "/",
+    },
+    {
+      name: "TV",
+      href: "/popular",
+    },
+    {
+      name: "Movies",
+      href: "/",
+    },
+    {
+      name: "New & Popular",
+      href: "/popular",
+    },
+    {
+      name: "My List",
+      href: "/",
+    },
+  ]
+
   return (
     <header className={`${isScrolled && 'bg-[#141414]'}`}>
       <div className="flex items-center space-x-4 md:space-x-10">
@@ -34,11 +57,11 @@ function Header() {
         />     
 
         <ul className="hidden space-x-4 md:flex">
-          <li className="menu">Home</li>
-          <li className="menu">TV</li>
-          <li className="menu">Movies</li>
-          <li className="menu">New & Popular</li>
-          <li className="menu">My List</li>
+          {menu.map((item, idx) => (
+            <Link key={idx} href={item.href}>
+              <li className="menu"> {item.name} </li>
+            </Link>
+          ))}
         </ul>
       </div>
 
