@@ -14,9 +14,9 @@ interface Props {
 function Popular({ original, topRated, horror }: Props) {
 
   return (
-    <Layout>
+    <Layout title="New & Popular">
       <section className="py-24 space-y-10">
-        <Row title="Popular Today" movies={original} />
+        <Row title="New Original Movies" movies={original} />
         <Row title="Popular This Weekend" movies={topRated} />
         <Row title="Popular This Month" movies={horror} />
       </section>

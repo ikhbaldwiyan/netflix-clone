@@ -25,7 +25,7 @@ const Home = ({
   trendingNow
 }: Props) => {
   return (
-    <Layout>
+    <Layout title="Home - Netflix Clone">
       <Banner netflixOriginals={actionMovies} />
       <section className="space-y-4 lg:space-y-16">
         <Row title="Trending Now" movies={trendingNow} />
