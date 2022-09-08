@@ -73,20 +73,35 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
     setAdded(!added);
   }
 
-  const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 750,
-    height: '90%',
-    bgcolor: 'background.paper',
-    boxShadow: 40,
-    p: 4,
-    backgroundColor: '#141414',
-    borderRadius: '8px',
-    overflow:'scroll',
-  };
+  const actionButton = [
+    {
+      name: 'Add',
+      icon: added ? (
+        <BiCheck size={25}  />
+      ) : (
+        <BiPlus size={25} />
+      ),
+      action: handleAddList
+    },
+    {
+      name: 'Like',
+      icon: liked ? (
+        <AiFillLike size={25}  />
+      ) : (
+        <AiOutlineLike size={25} />
+      ),
+      action:() => handleLike('like')
+    },
+    {
+      name: 'Dislike',
+      icon: disliked ? (
+        <AiFillDislike size={25} />
+      ) : (
+        <AiOutlineDislike size={25} />
+      ),
+      action:() => handleLike('dislike')
+    },
+  ];
 
   return (
     <MuiModal
@@ -98,9 +113,9 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
       }}
     >
       <Fade in={modal}>
-        <Box sx={style}>
+        <Box style={{transform: 'translate(-50%, -50%)'}} className="absolute p-4 top-[50%] h-[90%] bg-[#141414] left-[50%] w-auto lg:w-[750px] overflow-y-scroll rounded-lg scrollbar-hide">
           <IoMdCloseCircle onClick={handleClose} className="cursor-pointer hover:opacity-70" size="22" />
-          <div className="absolute -z-10 top-0 left-0 shadow-xl shadow-gray-800">
+          <div className="absolute -z-10 top-0 left-0 shadow-lg shadow-gray-800">
             {played ? (
               <>
                 <Image
@@ -129,7 +144,7 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
               />
             )}
           </div>
-          <div className={`${played ? 'mt-[17.6rem]' : 'mt-40'} space-y-4`}>
+          <div className={`${played ? 'lg:mt-[18.6rem] -mt-4' : '-mt-16 lg:mt-48'} space-y-4`}>
             <div className="flex space-x-4 mb-10 mt-[11rem]">
               <button onClick={() => setPlayed(!played)} className="py-2 gap-2 px-6 rounded-md flex bg-white text-black mt-10 font-semibold text-lg hover:opacity-80 shadow-lg">
                 {!played ? (
@@ -142,41 +157,33 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
                   </>
                 )}
               </button>
-              <button onClick={handleAddList} className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80">
-                {added ? (
-                  <BiCheck size={25} className="text-white"  />
-                ) : (
-                  <BiPlus size={25} className="text-white" />
-                )}
-              </button>
-              <button onClick={() => handleLike('like')} className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80">
-                {liked ? (
-                  <AiFillLike size={25} className="text-white"  />
-                ) : (
-                  <AiOutlineLike size={25} className="text-white" />
-                )}
-              </button>
-              <button onClick={() => handleLike('dislike')} className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80">
-                {disliked ? (
-                  <AiFillDislike size={25} className="text-white" />
-                ) : (
-                  <AiOutlineDislike size={25} className="text-white" />
-                )}
-              </button>
-              <button className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80" onClick={() => setMuted(!muted)}>
-                {muted ? (
-                  <FaVolumeMute size={25} className=" text-white" />
-                ) : (
-                  <FaVolumeUp size={25} className=" text-white" />
-                )}
-              </button>
+
+              <div className="flex w-full items-center justify-between px-2">
+                <div className='flex justify-between space-x-3'>
+                  {actionButton.map((item, idx) => (
+                    <button key={idx} onClick={item.action} className="p-2 rounded-full flex bg-neutral-900 border text-white mt-10 font-semibold hover:opacity-80">
+                      {item.icon}
+                    </button>
+                  ))}
+                </div>
+                <button className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80 ml-3" onClick={() => setMuted(!muted)}>
+                  {muted ? (
+                    <FaVolumeMute size={24} className=" text-white" />
+                  ) : (
+                    <FaVolumeUp size={25} className=" text-white" />
+                  )}
+                </button>
+              </div>
+
             </div>
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">
               {modalMovie.title} 
             </h1>
           </div>
           <div className="flex flex-col gap-x-10 gap-y-4 font-light md:flex-row">
-            <p className="w-4/6 text-slate-300 font-semibold py-3">{modalMovie?.overview}</p>
+            <p className="w-full lg:w-2/3 text-slate-200  py-3">
+              {modalMovie?.overview}
+            </p>
             <div className="flex flex-col space-y-3 text-sm">
               <h4 className="text-md mt-3 text-yellow-300 font-semibold">
                 <FaStar className="inline mb-1" /> {modalMovie.vote_average}  
