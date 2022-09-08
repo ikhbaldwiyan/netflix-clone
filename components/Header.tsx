@@ -49,12 +49,14 @@ function Header() {
   return (
     <header className={`${isScrolled && 'bg-[#141414]'}`}>
       <div className="flex items-center space-x-4 md:space-x-10">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-          width={100}
-          height={100}
-          className="cursor-pointer object-contain"
-        />     
+        <Link href="/">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+            width={100}
+            height={100}
+            className="cursor-pointer object-contain"
+          />  
+        </Link>
 
         <ul className="hidden space-x-4 md:flex">
           {menu.map((item, idx) => (

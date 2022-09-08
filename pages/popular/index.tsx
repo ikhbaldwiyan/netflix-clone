@@ -43,16 +43,17 @@ function Popular({ original, topRated, horror, upcoming }: Props) {
 export default Popular;
 
 export const getServerSideProps = async () => {
+  const randomPage = Math.floor((Math.random() * 10) + 1);
   const [ original, topRated, horror, upcoming ] = await Promise.all([
-    fetch(api.fetchNetflixOriginals).then((res) => res.json()),
-    fetch(api.fetchTopRated).then((res) => res.json()),
-    fetch(api.fetchHorrorMovies).then((res) => res.json()),
-    fetch(api.fethUpcomingMovies).then((res) => res.json()),
+    fetch(`${api.fethPopularMovies}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fethPopularMovies}&page=2`).then((res) => res.json()),
+    fetch(`${api.fethPopularMovies}&page=14`).then((res) => res.json()),
+    fetch(`${api.fethUpcomingMovies}&page=2`).then((res) => res.json()),
   ]);
 
   return {
     props: {
-      original: original.results.reverse(),
+      original: original.results,
       topRated: topRated.results.reverse(),
       horror: horror.results.reverse(),
       upcoming: upcoming.results

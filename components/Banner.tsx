@@ -2,8 +2,9 @@ import Image from "next/image"
 import React, { useEffect, useState } from 'react'
 import { baseUrl } from "../constants/movie";
 import { Movie } from "../types"
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaStop, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { IoMdInformationCircle } from "react-icons/io";
+import ReactPlayer from "react-player";
 
 interface Props {
   netflixOriginals: Movie[]
@@ -14,6 +15,9 @@ interface Props {
 
 function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
   const [movie, setMovie] = useState<Movie | null>();
+  const [trailer, setTrailer] = useState('');
+  const [played, setPlayed] = useState(false);
+  const [muted, setMuted] = useState(false);
 
   useEffect(() => {
     setMovie(
@@ -25,30 +29,85 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
     setModal(!modal)
     setModalMovie(movie)
   }
+
+  useEffect(() => {
+    if (!movie) return
+
+    async function fetchMovie() {
+      const data = await fetch(
+        `https://api.themoviedb.org/3/${
+          movie?.media_type === 'tv' ? 'tv' : 'movie'
+        }/${movie?.id}?api_key=${
+          process.env.NEXT_PUBLIC_API_KEY
+        }&language=en-US&append_to_response=videos`
+      ).then((response) => response.json())
+      if (data?.videos) {
+        const index = data.videos.results.findIndex(
+          (element: Element) => element.type === 'Trailer'
+        )
+        setTrailer(data.videos?.results[index]?.key)
+      }
+    }
+
+    fetchMovie()
+  }, [trailer, movie, played])
   
   return (
     <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[90vh] lg:justify-end lg:pb-8">
       <div className="absolute -z-10 top-0 left-0 h-[95vh] w-screen">
-        <Image 
-          src={`${baseUrl}${movie?.backdrop_path || movie?.poster_path}`}
-          layout="fill"   
-          objectFit="cover"
-        />
+        {trailer && played ? (
+          <div>
+            <ReactPlayer
+              url={`https://www.youtube.com/watch?v=${trailer}`}
+              width="100%"
+              height="100%"
+              style={{ position: 'absolute', top: '0', left: '0' }}
+              playing
+              onEnded={() => setPlayed(!played)}
+              muted={muted}
+            />
+          </div>
+        ) : (
+          <Image
+            src={`${baseUrl}${movie?.backdrop_path || movie?.poster_path}`}
+            layout="fill"
+            objectFit="cover"
+          />
+        )}
       </div>
       <div className="space-y-4">
-        <h1 className="text-2xl md:text-4xl lg:text-5xl">
+        <h1 className="text-2xl text-shadow-lg md:text-4xl lg:text-5xl">
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
         <p className="max-w-xs text-shadow-md text-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-lg">
           {movie?.overview}
         </p>
-        <div className="flex space-x-3 py-4">
-          <button className="banner-btn bg-white text-black">
-            <FaPlay className="h-4 w-4 text-black md:h-6 md:w-6" /> Play
-          </button>
-          <button onClick={handleModal} className="banner-btn bg-gray-400/70">
-            <IoMdInformationCircle className="h-5 w-5 md:h-8 md:w-8" /> More Info 
-          </button>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex space-x-3 py-4">
+            <button onClick={() => setPlayed(!played)} className="banner-btn bg-white text-black">
+              {!played ? (
+                <>
+                  <FaPlay className="h-4 w-4 text-black md:h-6 md:w-6" /> Play
+                </>
+              ) : (
+                <>
+                  <FaStop className="h-4 w-4 text-black md:h-6 md:w-6" /> Stop
+                </>
+              )}
+            </button>
+            <button onClick={handleModal} className="banner-btn bg-gray-400/70">
+              <IoMdInformationCircle className="h-5 w-5 md:h-8 md:w-8" /> More Info
+            </button>
+          </div>
+          {played && (
+            <button className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80 mr-20" onClick={() => setMuted(!muted)}>
+              {muted ? (
+                <FaVolumeMute size={24} className=" text-white" />
+              ) : (
+                <FaVolumeUp size={25} className=" text-white" />
+              )}
+            </button>
+          )}
         </div>
       </div>
 

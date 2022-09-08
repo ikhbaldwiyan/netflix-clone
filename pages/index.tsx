@@ -8,6 +8,7 @@ import Row from "../components/Row"
 import Modal from "../components/Modal"
 
 interface Props {
+  banner: Movie[]
   trendingNow: Movie[]
   topRated: Movie[]
   actionMovies: Movie[]
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const Home = ({ 
+  banner,
   actionMovies,
   comedyMovies,
   documentaries,
@@ -39,7 +41,7 @@ const Home = ({
 
   return (
     <Layout title="Home - Netflix Clone">
-      <Banner netflixOriginals={actionMovies} {...modalProps} />
+      <Banner netflixOriginals={banner} {...modalProps} />
       <section className="space-y-4 lg:space-y-16">
         <Row title="Trending Now" movies={trendingNow}  {...modalProps}/>
         <Row title="Top Rated" movies={topRated} {...modalProps}/>
@@ -59,7 +61,9 @@ const Home = ({
 export default Home;
 
 export const getServerSideProps = async () => {
+  const randomPage = Math.floor((Math.random() * 8) + 1);
   const [
+    banner,
     trendingNow,
     topRated,
     actionMovies,
@@ -68,17 +72,19 @@ export const getServerSideProps = async () => {
     romanceMovies,
     documentaries,
   ] = await Promise.all([
-    fetch(api.fetchTrending).then((res) => res.json()),
-    fetch(api.fetchTopRated).then((res) => res.json()),
-    fetch(api.fetchActionMovies).then((res) => res.json()),
-    fetch(api.fetchComedyMovies).then((res) => res.json()),
-    fetch(api.fetchHorrorMovies).then((res) => res.json()),
-    fetch(api.fetchRomanceMovies).then((res) => res.json()),
-    fetch(api.fetchDocumentaries).then((res) => res.json()),
+    fetch(`${api.fetchTrending}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fetchTrending}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fetchTopRated}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fetchActionMovies}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fetchComedyMovies}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fetchHorrorMovies}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fetchRomanceMovies}&page=${randomPage}`).then((res) => res.json()),
+    fetch(`${api.fetchDocumentaries}&page=${randomPage}`).then((res) => res.json()),
   ]);
 
   return {
     props: {
+      banner: banner.results,
       trendingNow: trendingNow.results,
       topRated: topRated.results,
       actionMovies: actionMovies.results,

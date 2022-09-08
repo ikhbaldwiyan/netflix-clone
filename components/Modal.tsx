@@ -132,6 +132,8 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
                   style={{ position: 'absolute', top: '0', left: '0' }}
                   playing
                   muted={muted}
+                  controls={false}
+                  onEnded={() => setPlayed(!played)}
                 />
               </>
             ) : (
@@ -166,18 +168,20 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
                     </button>
                   ))}
                 </div>
-                <button className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80 ml-3" onClick={() => setMuted(!muted)}>
-                  {muted ? (
-                    <FaVolumeMute size={24} className=" text-white" />
-                  ) : (
-                    <FaVolumeUp size={25} className=" text-white" />
-                  )}
-                </button>
+                {played && (
+                  <button className="p-2 rounded-full flex bg-neutral-900 border text-black mt-10 font-semibold hover:opacity-80 ml-3" onClick={() => setMuted(!muted)}>
+                    {muted ? (
+                      <FaVolumeMute size={24} className=" text-white" />
+                    ) : (
+                      <FaVolumeUp size={25} className=" text-white" />
+                    )}
+                  </button>
+                )}
               </div>
 
             </div>
             <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">
-              {modalMovie.title} 
+              {modalMovie?.title || modalMovie?.name || modalMovie?.original_name} 
             </h1>
           </div>
           <div className="flex flex-col gap-x-10 gap-y-4 font-light md:flex-row">
@@ -201,7 +205,7 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
 
               <div>
                 <span className="text-[gray]">Release Date:</span>{' '}
-                {modalMovie?.release_date}
+                {modalMovie?.release_date ?? '-'}
               </div>
             </div>
           </div>
