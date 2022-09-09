@@ -42,10 +42,8 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
         }&language=en-US&append_to_response=videos`
       ).then((response) => response.json())
       if (data?.videos) {
-        const index = data.videos.results.findIndex(
-          (element: Element) => element.type === 'Trailer'
-        )
-        setTrailer(data.videos?.results[index]?.key)
+        const index = data.videos?.results[0].key;
+        setTrailer(index);
       }
     }
 
@@ -76,7 +74,7 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
         )}
       </div>
       <div className="space-y-4">
-        <h1 className="text-2xl text-shadow-lg md:text-4xl lg:text-5xl">
+        <h1 className="text-2xl text-shadow-lg md:text-4xl lg:text-4xl font-bold max-w-2xl">
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
         <p className="max-w-xs text-shadow-md text-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-lg">

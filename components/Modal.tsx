@@ -43,10 +43,8 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
         }&language=en-US&append_to_response=videos`
       ).then((response) => response.json())
       if (data?.videos) {
-        const index = data.videos.results.findIndex(
-          (element: Element) => element.type === 'Trailer'
-        )
-        setTrailer(data.videos?.results[index]?.key)
+        const index = data.videos?.results[0].key;
+        setTrailer(index);
       }
       if (data?.genres) {
         setGenres(data.genres)
