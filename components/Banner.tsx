@@ -41,9 +41,18 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
           process.env.NEXT_PUBLIC_API_KEY
         }&language=en-US&append_to_response=videos`
       ).then((response) => response.json())
+
+      const listTrailer: any = [];
+
       if (data?.videos) {
-        const index = data.videos?.results[0].key;
-        setTrailer(index);
+        data.videos?.results.map((item: any) => {
+          if(item.type == 'Trailer') {
+            listTrailer.push(item.key)
+          }
+        });
+        const randomIndex = Math.floor((Math.random() * listTrailer.length));
+        setTrailer(listTrailer[randomIndex]);
+        console.log(randomIndex, trailer)
       }
     }
 
