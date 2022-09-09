@@ -112,7 +112,7 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
     >
       <Fade in={modal}>
         <Box style={{transform: 'translate(-50%, -50%)'}} className="absolute p-4 top-[50%] h-[90%] bg-[#141414] left-[50%] w-auto lg:w-[750px] overflow-y-scroll rounded-lg scrollbar-hide">
-          <IoMdCloseCircle onClick={handleClose} className="cursor-pointer hover:opacity-70" size="22" />
+          <IoMdCloseCircle onClick={handleClose} className="cursor-pointer hover:opacity-70 z-[99]" size="22" />
           <div className="absolute -z-10 top-0 left-0 shadow-lg shadow-gray-800">
             {played ? (
               <>
@@ -161,9 +161,17 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
               <div className="flex w-full items-center justify-between px-2">
                 <div className='flex justify-between space-x-3'>
                   {actionButton.map((item, idx) => (
-                    <button key={idx} onClick={item.action} className="p-2 rounded-full flex bg-neutral-900 border text-white mt-10 font-semibold hover:opacity-80">
-                      {item.icon}
-                    </button>
+                    item.name === 'Dislike' ? (
+                      !played && (
+                        <button key={idx} onClick={item.action} className="p-2 rounded-full flex bg-neutral-900 border text-white mt-10 font-semibold hover:opacity-80">
+                          {item.icon}
+                        </button>
+                      )
+                    ) : (
+                        <button key={idx} onClick={item.action} className="p-2 rounded-full flex bg-neutral-900 border text-white mt-10 font-semibold hover:opacity-80">
+                        {item.icon}
+                      </button>
+                    )
                   ))}
                 </div>
                 {played && (

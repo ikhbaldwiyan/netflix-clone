@@ -52,7 +52,7 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
   
   return (
     <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[90vh] lg:justify-end lg:pb-8">
-      <div className="absolute -z-10 top-0 left-0 h-[95vh] w-screen">
+      <div className="absolute -z-10 top-0 left-0 h-screen w-screen">
         {trailer && played ? (
           <div>
             <ReactPlayer
