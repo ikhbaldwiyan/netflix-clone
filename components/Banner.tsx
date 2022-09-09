@@ -52,7 +52,6 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
         });
         const randomIndex = Math.floor((Math.random() * listTrailer.length));
         setTrailer(listTrailer[randomIndex]);
-        console.log(randomIndex, trailer)
       }
     }
 
@@ -79,6 +78,7 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
             src={`${baseUrl}${movie?.backdrop_path || movie?.poster_path}`}
             layout="fill"
             objectFit="cover"
+            className="opacity-60"
           />
         )}
       </div>

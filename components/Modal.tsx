@@ -150,7 +150,7 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
                 width={900}   
                 height={400}
                 objectFit="cover"
-                className="rounded-t-md"
+                className="rounded-t-md opacity-90"
               />
             )}
           </div>
