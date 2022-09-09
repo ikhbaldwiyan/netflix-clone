@@ -5,6 +5,7 @@ import { Movie } from "../types"
 import { FaPlay, FaStop, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { IoMdInformationCircle } from "react-icons/io";
 import ReactPlayer from "react-player";
+import { isMobile } from 'react-device-detect';
 
 interface Props {
   netflixOriginals: Movie[]
@@ -91,17 +92,19 @@ function Banner({ netflixOriginals, modal, setModal, setModalMovie } : Props) {
         </p>
         <div className="flex w-full items-center justify-between">
           <div className="flex space-x-3 py-4">
-            <button onClick={() => setPlayed(!played)} className="banner-btn bg-white text-black">
-              {!played ? (
-                <>
-                  <FaPlay className="h-4 w-4 text-black md:h-6 md:w-6" /> Play
-                </>
-              ) : (
-                <>
-                  <FaStop className="h-4 w-4 text-black md:h-6 md:w-6" /> Stop
-                </>
-              )}
-            </button>
+            {!isMobile && (
+              <button onClick={() => setPlayed(!played)} className="banner-btn bg-white text-black">
+                {!played ? (
+                  <>
+                    <FaPlay className="h-4 w-4 text-black md:h-6 md:w-6" /> Play
+                  </>
+                ) : (
+                  <>
+                    <FaStop className="h-4 w-4 text-black md:h-6 md:w-6" /> Stop
+                  </>
+                )}
+              </button>
+            )}
             <button onClick={handleModal} className="banner-btn bg-gray-400/70">
               <IoMdInformationCircle className="h-5 w-5 md:h-8 md:w-8" /> More Info
             </button>

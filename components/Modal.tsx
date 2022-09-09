@@ -171,9 +171,17 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
               <div className="flex w-full items-center justify-between px-2">
                 <div className='flex justify-between space-x-3'>
                   {actionButton.map((item, idx) => (
-                    <button key={idx} onClick={item.action} className="p-2 rounded-full flex bg-neutral-900 border text-white mt-10 font-semibold hover:opacity-80">
-                      {item.icon}
-                    </button>
+                    item.name === 'Dislike' ? (
+                      !played && (
+                        <button key={idx} onClick={item.action} className="p-2 rounded-full flex bg-neutral-900 border text-white mt-10 font-semibold hover:opacity-80">
+                          {item.icon}
+                        </button>
+                      )
+                    ) : (
+                        <button key={idx} onClick={item.action} className="p-2 rounded-full flex bg-neutral-900 border text-white mt-10 font-semibold hover:opacity-80">
+                        {item.icon}
+                      </button>
+                    )
                   ))}
                 </div>
                 {played && (
