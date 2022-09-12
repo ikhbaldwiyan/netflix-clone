@@ -13,6 +13,8 @@ import { FaPlay, FaStar, FaStop, FaVolumeMute, FaVolumeUp } from "react-icons/fa
 import { IoMdCloseCircle } from "react-icons/io";
 import { BiCheck, BiPlus } from "react-icons/bi";
 import { AiFillDislike, AiFillLike, AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { addMyList, myListvalue, RemoveMyList } from "../slices/myList";
 
 interface ModalProps {
   modal: boolean,
@@ -22,6 +24,8 @@ interface ModalProps {
 }
 
 function Modal({ modal, setModal, modalMovie }: ModalProps) {
+  const myList = useSelector(myListvalue)
+  const dispatch = useDispatch();
 
   const [liked, setLiked] = useState(false);
   const [disliked, setDislaked] = useState(false);
@@ -30,6 +34,7 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [played, setPlayed] = useState(false);
   const [muted, setMuted] = useState(true);
+  const [isAdded, setIsAdded] = useState(false);
 
   useEffect(() => {
     if (!modalMovie) return
@@ -63,8 +68,18 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
 
     fetchMovie()
   }, [trailer])
-  
 
+  useEffect(() => {
+    if (myList) {
+      for (let index = 0; index < myList.length; index++) {
+        const movie = myList[index];
+        if (movie.id == modalMovie.id) {
+          setIsAdded(!isAdded);
+        }
+      }
+    }
+  }, [added])
+  
   const handleClose = () => {
     setModal(false)
   }
@@ -78,20 +93,46 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
   }
 
   const handleAddList = () => {
+    const oldMovie = localStorage.getItem('movies') && JSON.parse(localStorage.getItem('movies') || "");
+
+    if (!oldMovie) {
+      localStorage.setItem('movies', JSON.stringify([modalMovie]))
+      dispatch(addMyList([modalMovie]))
+    } else {
+      localStorage.setItem('movies', JSON.stringify([
+        ...oldMovie,
+        modalMovie
+      ]))
+      dispatch(addMyList([
+        ...oldMovie,
+        modalMovie
+      ]))
+    }
+    
     setAdded(!added);
   }
+
+  const handleRemoveList = () => {
+    setAdded(false)
+    setIsAdded(false)
+    dispatch(RemoveMyList(modalMovie.id))
+  }
+
+  useEffect(() => {
+    myList && localStorage.setItem('movies', JSON.stringify(myList))
+  }, [handleRemoveList])
 
   const actionButton = [
     {
       name: 'Add',
-      icon: added ? (
+      icon: added || isAdded ? (
         <BiCheck size={25}  />
       ) : (
         <BiPlus size={25} />
       ),
-      action: handleAddList
+      action: !isAdded ? handleAddList : handleRemoveList
     },
-    {
+    { 
       name: 'Like',
       icon: liked ? (
         <AiFillLike size={25}  />
