@@ -8,6 +8,7 @@ import MuiModal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { FaPlay, FaStar, FaStop, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
@@ -15,6 +16,7 @@ import { BiCheck, BiPlus } from "react-icons/bi";
 import { AiFillDislike, AiFillLike, AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { addMyList, myListvalue, RemoveMyList } from "../slices/myList";
+import { ToastContainer, toast } from 'react-toastify';
 
 interface ModalProps {
   modal: boolean,
@@ -35,6 +37,8 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
   const [played, setPlayed] = useState(false);
   const [muted, setMuted] = useState(true);
   const [isAdded, setIsAdded] = useState(false);
+
+  const movieName = modalMovie?.title || modalMovie?.name || modalMovie?.original_name || modalMovie?.original_title;
 
   useEffect(() => {
     if (!modalMovie) return
@@ -110,12 +114,28 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
     }
     
     setAdded(!added);
+
+    toast.success(`${movieName} Added to My List`, {
+      position: "top-right",
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: 'dark'
+    });
   }
 
   const handleRemoveList = () => {
     setAdded(false)
     setIsAdded(false)
     dispatch(RemoveMyList(modalMovie.id))
+
+    toast.error(`${movieName} has Removed from My List`, {
+      position: "top-right",
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: 'dark'
+    });
   }
 
   useEffect(() => {
@@ -164,6 +184,17 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
       <Fade in={modal}>
         <Box style={{transform: 'translate(-50%, -50%)'}} className="absolute p-4 top-[50%] h-[90%] bg-[#141414] left-[50%] w-auto lg:w-[750px] overflow-y-scroll rounded-lg scrollbar-hide">
           <IoMdCloseCircle onClick={handleClose} className="cursor-pointer hover:opacity-70" size="22" />
+          <ToastContainer
+            position="bottom-center"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <div className="absolute -z-10 top-0 left-0 shadow-lg shadow-gray-800">
             {played ? (
               <>
@@ -238,7 +269,7 @@ function Modal({ modal, setModal, modalMovie }: ModalProps) {
 
             </div>
             <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">
-              {modalMovie?.title || modalMovie?.name || modalMovie?.original_name} 
+              {movieName} 
             </h1>
           </div>
           <div className="flex flex-col gap-x-10 gap-y-4 font-light md:flex-row">
