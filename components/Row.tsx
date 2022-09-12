@@ -49,7 +49,7 @@ function Row({ title, movies, modal, modalMovie, setModal, setModalMovie, search
           <span className="font-light">{searchResult}</span>
         )}
       </h2>
-      {searchResult && movies.length == 0 && (
+      {searchResult && movies.length === 0 && (
         <div className="py-6 px-1">
             <div className='flex space-x-3'>
               <TbMovieOff size={40} />

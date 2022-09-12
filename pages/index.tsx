@@ -6,6 +6,8 @@ import Banner from "../components/Banner"
 import Layout from "../components/Layout"
 import Row from "../components/Row"
 import Modal from "../components/Modal"
+import { useSelector } from "react-redux"
+import { RootState } from "../store"
 
 interface Props {
   banner: Movie[]
@@ -29,6 +31,8 @@ const Home = ({
   trendingNow
 }: Props) => {
 
+  const { isSearch, value } = useSelector((state: RootState) => state.search)
+
   const [modal, setModal] = useState(false);
   const [modalMovie, setModalMovie] = useState<Movie | any>();
 
@@ -41,7 +45,9 @@ const Home = ({
 
   return (
     <Layout title="Home - Netflix Clone">
-      <Banner netflixOriginals={banner} {...modalProps} />
+      {!isSearch && !value && (
+        <Banner netflixOriginals={banner} {...modalProps} />
+      )}
       <section className="space-y-4 lg:space-y-16">
         <Row title="Trending Now" movies={trendingNow}  {...modalProps}/>
         <Row title="Top Rated" movies={topRated} {...modalProps}/>

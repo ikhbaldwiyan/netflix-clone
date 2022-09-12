@@ -3,13 +3,17 @@ import { IoMdSearch } from 'react-icons/io';
 import { AiFillBell } from 'react-icons/ai';
 import Link from "next/link";
 import SearchResult from './SearchResult';
+import { useDispatch, useSelector } from "react-redux";
+import { searchSuccess, searchFailed, isSarchValue } from "../slices/searchSlice";
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [search, setSearch] = useState(false);
   const [movies, setMovies] = useState([]);
   const [value, setValue] = useState('');
   const [pages, setPages] = useState('');
+
+  const isSearch = useSelector(isSarchValue)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,12 +34,10 @@ function Header() {
 
   const handleSearch = (result: string) => {
     if (result.length > 1) {
-      setSearch(true)
       setValue(result)
     } else {
-      setSearch(false)
+      setValue('')
     }
-    console.log(result)
   }
 
   useEffect(() => {
@@ -45,16 +47,28 @@ function Header() {
       }&language=en-US&query=${value}&page=1&include_adult=false`)
       .then((response) => response.json())
 
-      if(data.results && value) {
+      if (data.results && value) {
         setMovies(data.results)
         setPages(data.total_pages)
+        dispatch(
+          searchSuccess({
+            value: value,
+            data: movies,
+            page: pages
+          })
+        )
       } else {
-        setSearch(false)
+        setValue('')
+        dispatch(searchFailed(value))
       }
+
+      movies.length === 0 && dispatch(
+        searchFailed(value)
+      )
     }
 
     getSearchMovies();
-  }, [search, value])
+  }, [isSearch, value])
 
 
   const menu = [
@@ -101,13 +115,13 @@ function Header() {
           </ul>
         </div>
         <div className="flex items-center space-x-6 text-sm">
-          <form className="hidden lg:flex items-center">   
-              <div className="relative w-full">
-                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pr-3 pointer-events-none">
-                  <IoMdSearch className="hidden h-6 w-6 sm:inline text-white" />
-                </div>
-                <input onChange={(e) => handleSearch(e.target.value)} type="text" className="bg-[#141414] bg-opacity-50 border border-gray-300 text-white text-sm rounded-lg block w-full pl-10 py-2 px-4" placeholder="Search Movies" />
+          <form className="hidden md:flex lg:flex items-center">
+            <div className="relative w-full">
+              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pr-3 pointer-events-none">
+                <IoMdSearch className="hidden h-6 w-6 sm:inline text-white" />
               </div>
+              <input onChange={(e) => handleSearch(e.target.value)} type="text" className="bg-[#141414] bg-opacity-50 border border-gray-300 text-white text-sm rounded-lg block w-full pl-10 py-2 px-4" placeholder="Search Movies" />
+            </div>
           </form>
           <AiFillBell className="h-6 w-6" />
           <Link href="/account">
@@ -120,9 +134,9 @@ function Header() {
         </div>
       </header>
 
-      {search && movies.length ? (
+      {isSearch ? (
         <SearchResult result={value} movies={movies} pages={pages} />
-      ) : movies.length === 0 && value.length  ? (
+      ) : !isSearch && value.length ? (
         <SearchResult result={value} movies={movies} pages={pages} />
       ) : (
         ''

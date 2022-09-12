@@ -32,7 +32,7 @@ function SearchResult({ result, movies, pages }: any) {
 
   return (
     <main className="relative pl-4 lg:space-y-24 lg:pl-10">
-      <section className="py-24 pb-48 space-y-10">
+      <section className="py-24 space-y-10">
         <Row title="Search Result for" movies={movies} searchResult={result} {...modalProps} />
         {page > 1 && (
           <Row title="" movies={movie} {...modalProps} />
