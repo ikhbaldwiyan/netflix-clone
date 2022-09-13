@@ -5,7 +5,6 @@ import { imageUrl } from "../constants/movie"
 import Image from "next/image"
 
 interface Props {
-  title: string
   movies: Movie[]
   modal: boolean
   setModal: Function
@@ -14,7 +13,7 @@ interface Props {
   searchResult?: string
 }
 
-function MovieList({ title, movies, modal, setModal, setModalMovie, searchResult }: Props) {
+function MovieList({ movies, modal, setModal, setModalMovie, searchResult }: Props) {
 
   const handleModal = (movie: any) => {
     setModal(!modal)
@@ -24,7 +23,7 @@ function MovieList({ title, movies, modal, setModal, setModalMovie, searchResult
   return (
     <div className="h-40">
       <h2 className="w-full cursor-pointer text-sm font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-2xl mb-4">
-        {title}
+        List Movies
       </h2>
       {searchResult && movies.length === 0 && (
         <div className="py-6 px-1">

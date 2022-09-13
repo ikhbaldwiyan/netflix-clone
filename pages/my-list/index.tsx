@@ -11,7 +11,7 @@ function MyList() {
   const [modal, setModal] = useState(false);
   const [modalMovie, setModalMovie] = useState<Movie | any>();
 
-  const myList = useSelector(myListvalue)
+  const movies = useSelector(myListvalue)
   const dispatch = useDispatch();
 
   const modalProps = {
@@ -30,10 +30,15 @@ function MyList() {
   return (
     <Layout title="My List">
       <section className="py-24 space-y-10">
-        {myList.length ? (
-          <MyLists title="List Movies" movies={myList} {...modalProps} />
+        {movies.length ? (
+          <MyLists movies={movies} {...modalProps} />
         ) : (
-          <p>Movies Not Found Please add it</p>
+          <div>
+            <h2 className="w-full cursor-pointer text-sm font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-2xl mb-4">
+              List Movies
+            </h2>
+            <p>Movies Not Found Please add it</p>
+          </div>
         )}
       </section>
       {modal && (
