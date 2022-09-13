@@ -36,7 +36,7 @@ function MovieList({ movies, modal, setModal, setModalMovie, searchResult }: Pro
       <div className="group w-full md:-ml-2 ">
         <div className="columns-4 md:p-2 space-y-4">
           {movies.map((movie) => (
-             <div onClick={() => handleModal(movie)} className="relative h-28 cursor-pointer transition duration-200 ease-out md:h-40 md:min-w-[150px] lg:hover:scale-110 hover:shadow-lg">
+             <div key={movie.id} onClick={() => handleModal(movie)} className="relative h-28 cursor-pointer transition duration-200 ease-out md:h-40 md:min-w-[150px] lg:hover:scale-110 hover:shadow-lg">
               <Image 
                 src={`${imageUrl}${movie?.backdrop_path || movie?.poster_path}`}
                 layout="fill"

@@ -24,7 +24,7 @@ function MyList() {
   useEffect(() => {
     const myListMovies = localStorage.getItem('movies') && JSON.parse(localStorage.getItem('movies') || "");
     dispatch(MyListSuccess(myListMovies))
-  }, [])
+  }, [dispatch])
   
 
   return (
