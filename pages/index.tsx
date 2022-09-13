@@ -67,7 +67,7 @@ const Home = ({
 export default Home;
 
 export const getServerSideProps = async () => {
-  const randomPage = Math.floor((Math.random() * 8) + 1);
+  const randomPage = Math.floor((Math.random() * 10) + 1);
   const [
     banner,
     trendingNow,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import Layout from '../../components/Layout'
 import Modal from "../../components/Modal"
-import Row from "../../components/Row"
+import MyLists from "../../components/MovieList"
 
 import { Movie } from "../../types"
 import { MyListSuccess, myListvalue } from "../../slices/myList"
@@ -30,8 +30,8 @@ function MyList() {
   return (
     <Layout title="My List">
       <section className="py-24 space-y-10">
-        {myList ? (
-          <Row title="List Movies" movies={myList} {...modalProps} />
+        {myList.length ? (
+          <MyLists title="List Movies" movies={myList} {...modalProps} />
         ) : (
           <p>Movies Not Found Please add it</p>
         )}
